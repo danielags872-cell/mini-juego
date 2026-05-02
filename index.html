@@ -5,23 +5,29 @@
   <title>Mia's World</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h1>🐶 Mia's World</h1>
+<div class="container">
 
-<div id="pet-section">
-  <img id="mia" src="assets/mia_normal.png">
-  <p id="status">Mia está feliz 💕</p>
+  <h1>🐶 Mia's World</h1>
 
-  <button onclick="feed()">🍩 Dar dona</button>
-  <button onclick="play()">🎾 Jugar</button>
-  <button onclick="startRunner()">🏃 Salir</button>
+  <div class="card">
+    <img id="mia" src="assets/mia_normal.png">
+    <p id="status">Mia está feliz 💕</p>
+
+    <button onclick="feed()">🍩 Dar dona</button>
+    <button onclick="play()">🎾 Jugar</button>
+    <button onclick="startRunner()">🎮 Jugar</button>
+  </div>
+
+  <canvas id="runner" width="400" height="200"></canvas>
+
+  <div id="memories"></div>
+
 </div>
 
-<canvas id="runner" width="400" height="200"></canvas>
-
-<div id="memories"></div>
-
+<!-- Scripts SIEMPRE al final -->
 <script src="js/data.js"></script>
 <script src="js/pet.js"></script>
 <script src="js/runner.js"></script>
