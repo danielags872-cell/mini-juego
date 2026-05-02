@@ -5,8 +5,13 @@ body {
 }
 
 #mia {
-  width: 150px;
+  width: 160px;
   border-radius: 20px;
+  transition: transform 0.3s;
+}
+
+#mia:hover {
+  transform: scale(1.05);
 }
 
 button {
@@ -16,6 +21,11 @@ button {
   border-radius: 10px;
   background: #ffb6c1;
   cursor: pointer;
+}
+
+canvas {
+  margin-top: 20px;
+  border: 2px solid #ccc;
 }
 
 .memory {
