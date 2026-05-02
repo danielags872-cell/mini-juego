@@ -1,0 +1,23 @@
+body {
+  font-family: Arial;
+  text-align: center;
+  background: #ffeef5;
+}
+
+#mia {
+  width: 150px;
+  border-radius: 20px;
+}
+
+button {
+  margin: 5px;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #ffb6c1;
+  cursor: pointer;
+}
+
+.memory {
+  margin-top: 10px;
+}
