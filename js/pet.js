@@ -1,16 +1,28 @@
 let pet = {
   hunger: 50,
-  happiness: 80,
+  happiness: 80
 };
 
 function feed() {
   pet.hunger -= 10;
-  updateStatus("Mia comió 🍩 y está feliz");
+
+  document.getElementById("mia").src = "assets/mia_comiendo.png";
+  updateStatus("Mia está comiendo 🍩");
+
+  setTimeout(() => {
+    document.getElementById("mia").src = "assets/mia_normal.png";
+  }, 2000);
 }
 
 function play() {
   pet.happiness += 10;
-  updateStatus("Mia está jugando contigo 💕");
+
+  document.getElementById("mia").src = "assets/mia_jugando.png";
+  updateStatus("Mia está jugando 💕");
+
+  setTimeout(() => {
+    document.getElementById("mia").src = "assets/mia_feliz.png";
+  }, 2000);
 }
 
 function updateStatus(msg) {
