@@ -1,0 +1,185 @@
+Aquí tienes el código completo integrado en un solo archivo HTML. He incluido el CSS y el JavaScript dentro para que solo tengas que **copiar, pegar y guardar** como un archivo `.html`.
+
+**Nota importante:** Para que funcione, las imágenes y sonidos deben estar en una carpeta llamada `assets` con los nombres exactos que aparecen en la sección `cartasInfo` del código.
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vuelo 828: Nuestra Aventura ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS INTEGRADO */
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            color: white;
+            background-image: url('assets/image_1.png'); /* Tu fondo de atardecer */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        #intro-negra {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #000; /* Su color favorito */
+            z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            transition: transform 1.5s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        #avion-animado {
+            font-size: 80px;
+            animation: vueloIntro 3.5s forwards ease-in-out;
+        }
+
+        @keyframes vueloIntro {
+            0% { transform: translateX(-120vw) rotate(0deg); }
+            50% { transform: translateX(0) rotate(-5deg) scale(1.2); }
+            100% { transform: translateX(120vw) rotate(0deg); }
+        }
+
+        .quitar-intro { transform: translateY(-100%); }
+
+        .main-content {
+            text-align: center; width: 100%; max-width: 900px;
+            padding: 20px; display: flex; flex-direction: column; align-items: center;
+        }
+
+        h1 { font-family: 'Dancing Script', cursive; font-size: 3rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin: 10px 0; }
+
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); 
+            gap: 10px; width: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 20px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .card { aspect-ratio: 1 / 1; perspective: 1000px; cursor: pointer; }
+        .card-inner {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .card-front { background: white; transform: rotateY(180deg); overflow: hidden; }
+        .card-front img { width: 100%; height: 100%; object-fit: cover; }
+        .card-back { background: #000; color: white; font-size: 1.5rem; border: 1px solid #333; }
+
+        button {
+            margin-top: 20px; padding: 10px 25px;
+            background: rgba(255,255,255,0.2); color: white;
+            border: 1px solid white; border-radius: 20px; cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            .game-container { grid-template-columns: repeat(4, 1fr); }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="intro-negra">
+        <div id="avion-animado">✈️</div>
+        <p>Iniciando vuelo de recuerdos...</p>
+    </div>
+
+    <div class="main-content">
+        <h1>Para mi persona favorita ❤️</h1>
+        <div class="game-container" id="game-board"></div>
+        <button onclick="location.reload()">Reiniciar Vuelo</button>
+    </div>
+
+    <script>
+        const board = document.getElementById('game-board');
+        const introNegra = document.getElementById('intro-negra');
+        const sonidoAvion = new Audio('assets/avion-pasando.mp3');
+
+        // Configuración de cartas: imagen y sonido
+        const cartasInfo = [
+            { img: 'nosotros1.jpg', snd: null }, { img: 'nosotros2.jpg', snd: null },
+            { img: 'mia.jpg', snd: 'ladre.mp3' }, { img: 'manifiesto.jpg', snd: 'misterio.mp3' },
+            { img: 'mario1.jpg', snd: 'mario_coin.mp3' }, { img: 'mario2.jpg', snd: 'mario_jump.mp3' },
+            { img: 'grupofirme.jpg', snd: 'firme_clip.mp3' }, { img: 'fuerzaregida.jpg', snd: 'regida_clip.mp3' },
+            { img: 'girasoles.jpg', snd: null }, { img: 'baloncesto.jpg', snd: 'basket.mp3' },
+            { img: 'uvas.jpg', snd: null }, { img: 'donas.jpg', snd: null }
+        ];
+
+        let cartasValores = [...cartasInfo, ...cartasInfo];
+        let elegidas = [];
+        let parejas = 0;
+        let bloqueado = false;
+
+        window.onload = () => {
+            sonidoAvion.play().catch(() => {});
+            setTimeout(() => {
+                introNegra.classList.add('quitar-intro');
+                crearJuego();
+            }, 3200);
+        };
+
+        function crearJuego() {
+            cartasValores.sort(() => Math.random() - 0.5);
+            board.innerHTML = '';
+            cartasValores.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front"><img src="assets/${item.img}"></div>
+                        <div class="card-back">✈️</div>
+                    </div>`;
+                card.onclick = () => voltear(card, item);
+                board.appendChild(card);
+            });
+        }
+
+        function voltear(card, item) {
+            if (bloqueado || card.classList.contains('flipped') || elegidas.includes(card)) return;
+            
+            card.classList.add('flipped');
+            if (item.snd) new Audio(`assets/${item.snd}`).play().catch(() => {});
+            elegidas.push(card);
+
+            if (elegidas.length === 2) {
+                bloqueado = true;
+                const [c1, c2] = elegidas;
+                if (c1.innerHTML === c2.innerHTML) {
+                    parejas++;
+                    elegidas = [];
+                    bloqueado = false;
+                    if (parejas === cartasInfo.length) victoria();
+                } else {
+                    setTimeout(() => {
+                        c1.classList.remove('flipped');
+                        c2.classList.remove('flipped');
+                        elegidas = [];
+                        bloqueado = false;
+                    }, 800);
+                }
+            }
+        }
+
+        function victoria() {
+            setTimeout(() => {
+                alert("¡MISIÓN CUMPLIDA! ✈️\n\nHas aterrizado con éxito el vuelo de nuestros recuerdos. Ni Manifiesto, ni Bowser, ni la música pudieron distraerte de lo que importa. ❤️");
+            }, 500);
+        }
+    </script>
+</body>
+</html>
+```
