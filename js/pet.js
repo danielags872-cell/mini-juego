@@ -10,7 +10,7 @@ function feed() {
   updateStatus("Mia está comiendo 🍩");
 
   setTimeout(() => {
-    document.getElementById("mia").src = "assets/mia_normal.png";
+    document.getElementById("mia").src = "assets/mia_feliz.png";
   }, 2000);
 }
 
@@ -21,7 +21,7 @@ function play() {
   updateStatus("Mia está jugando 💕");
 
   setTimeout(() => {
-    document.getElementById("mia").src = "assets/mia_feliz.png";
+    document.getElementById("mia").src = "assets/mia_normal.png";
   }, 2000);
 }
 
