@@ -3,155 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vuelo 828: Nuestra Aventura ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>Vuelo 828 ❤️</title>
     <style>
+        :root { --negro: #000000; --dorado: #d4af37; }
         body {
-            margin: 0; padding: 0;
-            font-family: 'Poppins', sans-serif;
-            min-height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            color: white;
-            background-image: url('assets/image_1.png'); 
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            overflow-x: hidden;
+            margin: 0; background: var(--negro);
+            color: white; font-family: 'Segoe UI', sans-serif;
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; overflow: hidden;
+            background-image: url('assets/image_1.png'); /* Tu atardecer */
+            background-size: cover; background-position: center;
         }
 
-        #intro-negra {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: #000;
-            z-index: 9999;
-            display: flex; justify-content: center; align-items: center; flex-direction: column;
-            transition: transform 1.5s cubic-bezier(0.7, 0, 0.3, 1);
+        /* INTRO PROFESIONAL */
+        #intro {
+            position: fixed; inset: 0; background: var(--negro);
+            z-index: 100; display: flex; align-items: center; justify-content: center;
+            transition: opacity 1s ease;
+        }
+        .avion-vuelo {
+            width: 100px; fill: white;
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.6));
+            animation: despegar 3s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+        }
+        @keyframes despegar {
+            0% { transform: translateX(-150vw) translateY(50px) rotate(10deg) scale(0.5); }
+            50% { transform: translateX(0) translateY(0) rotate(-5deg) scale(1.2); }
+            100% { transform: translateX(150vw) translateY(-100px) rotate(10deg) scale(0.8); }
         }
 
-        #avion-animado { font-size: 80px; animation: vueloIntro 3.5s forwards ease-in-out; }
-
-        @keyframes vueloIntro {
-            0% { transform: translateX(-120vw) rotate(0deg); }
-            50% { transform: translateX(0) rotate(-5deg) scale(1.2); }
-            100% { transform: translateX(120vw) rotate(0deg); }
+        /* JUEGO */
+        .grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 12px; padding: 20px;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
+            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
         }
-
-        .quitar-intro { transform: translateY(-100%); }
-
-        .main-content {
-            text-align: center; width: 100%; max-width: 900px;
-            padding: 20px; display: flex; flex-direction: column; align-items: center;
+        .card { width: 80px; height: 80px; perspective: 1000px; cursor: pointer; }
+        .inner {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.6s; transform-style: preserve-3d;
         }
-
-        h1 { font-family: 'Dancing Script', cursive; font-size: 3rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-
-        .game-container {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr); 
-            gap: 10px; width: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            padding: 20px; border-radius: 20px;
+        .card.flipped .inner { transform: rotateY(180deg); }
+        .front, .back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: 10px;
         }
-
-        .card { aspect-ratio: 1 / 1; perspective: 1000px; cursor: pointer; }
-        .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
-        .card.flipped .card-inner { transform: rotateY(180deg); }
-        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-        .card-front { background: white; transform: rotateY(180deg); overflow: hidden; }
-        .card-front img { width: 100%; height: 100%; object-fit: cover; }
-        .card-back { background: #000; color: white; font-size: 1.5rem; border: 1px solid #333; }
-
-        @media (max-width: 600px) { .game-container { grid-template-columns: repeat(4, 1fr); } }
+        .back { background: #1a1a1a; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .front { transform: rotateY(180deg); background: white; overflow: hidden; }
+        .front img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .hidden { opacity: 0; pointer-events: none; }
     </style>
 </head>
 <body>
 
-    <div id="intro-negra">
-        <div id="avion-animado">✈️</div>
-        <p>Iniciando vuelo 828...</p>
+    <div id="intro">
+        <svg class="avion-vuelo" viewBox="0 0 24 24"><path d="M21,16L14,11.5V5A1.5,1.5 0 0,0 12.5,3.5A1.5,1.5 0 0,0 11,5V11.5L4,16V18L11,15.75V21L9,22.5V24L12.5,23L16,24V22.5L14,21V15.75L21,18V16Z"/></svg>
     </div>
 
-    <div class="main-content">
-        <h1>Para mi persona favorita ❤️</h1>
-        <div class="game-container" id="game-board"></div>
-        <button style="margin-top:20px; padding:10px; cursor:pointer;" onclick="location.reload()">Reiniciar Vuelo</button>
-    </div>
+    <div class="grid" id="board"></div>
 
     <script>
-        const board = document.getElementById('game-board');
-        const introNegra = document.getElementById('intro-negra');
-        
-        // SONIDOS CON LINKS DIRECTOS (Ya no necesitas descargarlos)
-        const sndAvion = new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_51c6204c3d.mp3');
-        const sndMario = 'https://www.soundboardguy.com/wp-content/uploads/2021/05/mario-coin.mp3';
-        const sndFirme = 'https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptoken=592070_13490710'; // Ejemplo genérico
-        const sndRegida = 'https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptoken=592070_13490711'; // Ejemplo genérico
-        const sndMisterio = 'https://cdn.pixabay.com/audio/2021/08/09/audio_8233f8d672.mp3';
-        const sndLadre = 'https://cdn.pixabay.com/audio/2022/03/24/audio_3d14909f19.mp3';
-
-        const cartasInfo = [
-            { img: 'nosotros1.jpg', snd: null }, { img: 'nosotros2.jpg', snd: null },
-            { img: 'mia.jpg', snd: sndLadre }, { img: 'manifiesto.jpg', snd: sndMisterio },
-            { img: 'mario1.jpg', snd: sndMario }, { img: 'mario2.jpg', snd: sndMario },
-            { img: 'grupofirme.jpg', snd: sndFirme }, { img: 'fuerzaregida.jpg', snd: sndRegida },
-            { img: 'girasoles.jpg', snd: null }, { img: 'baloncesto.jpg', snd: 'https://cdn.pixabay.com/audio/2022/03/10/audio_c8e9b6f8f5.mp3' },
-            { img: 'uvas.jpg', snd: null }, { img: 'donas.jpg', snd: null }
+        // LISTA DE IMÁGENES - Asegúrate que en la carpeta 'assets' se llamen EXACTAMENTE así
+        const fotos = [
+            'nosotros1.jpg', 'nosotros2.jpg', 'mia.jpg', 'manifiesto.jpg',
+            'mario1.jpg', 'mario2.jpg', 'grupofirme.jpg', 'fuerzaregida.jpg'
         ];
 
-        let cartasValores = [...cartasInfo, ...cartasInfo];
-        let elegidas = [];
-        let parejas = 0;
-        let bloqueado = false;
+        const board = document.getElementById('board');
+        let deck = [...fotos, ...fotos].sort(() => Math.random() - 0.5);
+        let active = [];
 
-        window.onload = () => {
-            sndAvion.play().catch(() => {});
-            setTimeout(() => {
-                introNegra.classList.add('quitar-intro');
-                crearJuego();
-            }, 3200);
-        };
+        // Quitar intro
+        setTimeout(() => document.getElementById('intro').classList.add('hidden'), 3000);
 
-        function crearJuego() {
-            cartasValores.sort(() => Math.random() - 0.5);
-            board.innerHTML = '';
-            cartasValores.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-inner">
-                        <div class="card-front"><img src="assets/${item.img}"></div>
-                        <div class="card-back">✈️</div>
-                    </div>`;
-                card.onclick = () => {
-                    if (bloqueado || card.classList.contains('flipped')) return;
-                    card.classList.add('flipped');
-                    if (item.snd) new Audio(item.snd).play().catch(() => {});
-                    elegidas.push(card);
-                    if (elegidas.length === 2) {
-                        bloqueado = true;
-                        if (elegidas[0].querySelector('img').src === elegidas[1].querySelector('img').src) {
-                            parejas++;
-                            elegidas = [];
-                            bloqueado = false;
-                            if (parejas === cartasInfo.length) victoria();
-                        } else {
-                            setTimeout(() => {
-                                elegidas.forEach(c => c.classList.remove('flipped'));
-                                elegidas = [];
-                                bloqueado = false;
-                            }, 800);
-                        }
-                    }
-                };
-                board.appendChild(card);
-            });
+        // Crear tablero
+        deck.forEach(name => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="inner">
+                    <div class="back">✈️</div>
+                    <div class="front"><img src="assets/${name}" alt="Error"></div>
+                </div>`;
+            card.onclick = () => flip(card);
+            board.appendChild(card);
+        });
+
+        function flip(card) {
+            if (active.length < 2 && !card.classList.contains('flipped')) {
+                card.classList.add('flipped');
+                active.push(card);
+                if (active.length === 2) check();
+            }
         }
 
-        function victoria() {
-            setTimeout(() => {
-                alert("¡ATERRIZAJE EXITOSO! ✈️\n\nHas superado todas las distracciones: Manifiesto, Mario y hasta la música. ¡Eres la mejor copiloto! Te amo. ❤️");
-            }, 500);
+        function check() {
+            const [a, b] = active;
+            if (a.querySelector('img').src === b.querySelector('img').src) {
+                active = [];
+            } else {
+                setTimeout(() => {
+                    a.classList.remove('flipped');
+                    b.classList.remove('flipped');
+                    active = [];
+                }, 1000);
+            }
         }
     </script>
 </body>
