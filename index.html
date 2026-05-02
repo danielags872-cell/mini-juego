@@ -1,116 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vuelo 828 ❤️</title>
-    <style>
-        :root { --negro: #000000; --dorado: #d4af37; }
-        body {
-            margin: 0; background: var(--negro);
-            color: white; font-family: 'Segoe UI', sans-serif;
-            display: flex; align-items: center; justify-content: center;
-            min-height: 100vh; overflow: hidden;
-            background-image: url('assets/image_1.png'); /* Tu atardecer */
-            background-size: cover; background-position: center;
-        }
-
-        /* INTRO PROFESIONAL */
-        #intro {
-            position: fixed; inset: 0; background: var(--negro);
-            z-index: 100; display: flex; align-items: center; justify-content: center;
-            transition: opacity 1s ease;
-        }
-        .avion-vuelo {
-            width: 100px; fill: white;
-            filter: drop-shadow(0 0 15px rgba(255,255,255,0.6));
-            animation: despegar 3s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
-        }
-        @keyframes despegar {
-            0% { transform: translateX(-150vw) translateY(50px) rotate(10deg) scale(0.5); }
-            50% { transform: translateX(0) translateY(0) rotate(-5deg) scale(1.2); }
-            100% { transform: translateX(150vw) translateY(-100px) rotate(10deg) scale(0.8); }
-        }
-
-        /* JUEGO */
-        .grid {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 12px; padding: 20px;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
-            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
-        }
-        .card { width: 80px; height: 80px; perspective: 1000px; cursor: pointer; }
-        .inner {
-            position: relative; width: 100%; height: 100%;
-            transition: transform 0.6s; transform-style: preserve-3d;
-        }
-        .card.flipped .inner { transform: rotateY(180deg); }
-        .front, .back {
-            position: absolute; width: 100%; height: 100%;
-            backface-visibility: hidden; border-radius: 10px;
-        }
-        .back { background: #1a1a1a; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
-        .front { transform: rotateY(180deg); background: white; overflow: hidden; }
-        .front img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .hidden { opacity: 0; pointer-events: none; }
-    </style>
+  <meta charset="UTF-8">
+  <title>Mia's World</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="intro">
-        <svg class="avion-vuelo" viewBox="0 0 24 24"><path d="M21,16L14,11.5V5A1.5,1.5 0 0,0 12.5,3.5A1.5,1.5 0 0,0 11,5V11.5L4,16V18L11,15.75V21L9,22.5V24L12.5,23L16,24V22.5L14,21V15.75L21,18V16Z"/></svg>
-    </div>
+<div id="game">
 
-    <div class="grid" id="board"></div>
+  <h1>🐶 Mia's World</h1>
 
-    <script>
-        // LISTA DE IMÁGENES - Asegúrate que en la carpeta 'assets' se llamen EXACTAMENTE así
-        const fotos = [
-            'nosotros1.jpg', 'nosotros2.jpg', 'mia.jpg', 'manifiesto.jpg',
-            'mario1.jpg', 'mario2.jpg', 'grupofirme.jpg', 'fuerzaregida.jpg'
-        ];
+  <div id="pet-section">
+    <img id="mia" src="assets/mia.png">
+    <p id="status">Mia está feliz 💕</p>
 
-        const board = document.getElementById('board');
-        let deck = [...fotos, ...fotos].sort(() => Math.random() - 0.5);
-        let active = [];
+    <button onclick="feed()">🍩 Dar dona</button>
+    <button onclick="play()">🎾 Jugar</button>
+    <button onclick="startRunner()">🏃 Salir</button>
+  </div>
 
-        // Quitar intro
-        setTimeout(() => document.getElementById('intro').classList.add('hidden'), 3000);
+  <canvas id="runner" width="400" height="200"></canvas>
 
-        // Crear tablero
-        deck.forEach(name => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <div class="inner">
-                    <div class="back">✈️</div>
-                    <div class="front"><img src="assets/${name}" alt="Error"></div>
-                </div>`;
-            card.onclick = () => flip(card);
-            board.appendChild(card);
-        });
+  <div id="memories"></div>
 
-        function flip(card) {
-            if (active.length < 2 && !card.classList.contains('flipped')) {
-                card.classList.add('flipped');
-                active.push(card);
-                if (active.length === 2) check();
-            }
-        }
+</div>
 
-        function check() {
-            const [a, b] = active;
-            if (a.querySelector('img').src === b.querySelector('img').src) {
-                active = [];
-            } else {
-                setTimeout(() => {
-                    a.classList.remove('flipped');
-                    b.classList.remove('flipped');
-                    active = [];
-                }, 1000);
-            }
-        }
-    </script>
+<script src="js/data.js"></script>
+<script src="js/pet.js"></script>
+<script src="js/runner.js"></script>
+<script src="js/main.js"></script>
+
 </body>
 </html>
