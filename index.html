@@ -1,37 +1,188 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Mia's World</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para ti</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    transition: background 1s ease-in-out;
+    background-size: cover;
+    background-position: center;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 0;
+}
+
+.container {
+    text-align: center;
+    max-width: 700px;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+h1 {
+    margin-bottom: 20px;
+    opacity: 0;
+    transition: 1s;
+}
+
+p {
+    font-size: 18px;
+    line-height: 1.6;
+    opacity: 0;
+    transition: 1s;
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    background: white;
+    color: #2a5298;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.heart {
+    position: absolute;
+    color: rgba(255,255,255,0.3);
+    animation: float 6s linear infinite;
+}
+
+@keyframes float {
+    from {
+        transform: translateY(100vh);
+    }
+    to {
+        transform: translateY(-10vh);
+    }
+}
+</style>
 </head>
 
 <body>
 
 <div class="container">
-
-  <h1>🐶 Mia's World</h1>
-
-  <div class="card">
-    <img id="mia" src="assets/mia_normal.png">
-    <p id="status">Mia está feliz 💕</p>
-
-    <button onclick="feed()">🍩 Dar dona</button>
-    <button onclick="play()">🎾 Jugar</button>
-    <button onclick="startRunner()">🎮 Jugar</button>
-  </div>
-
-  <canvas id="runner" width="400" height="200"></canvas>
-
-  <div id="memories"></div>
-
+    <h1 id="title">Tengo algo que decirte...</h1>
+    <p id="message"></p>
+    <button id="btn">Haz clic aquí</button>
 </div>
 
-<!-- Scripts SIEMPRE al final -->
-<script src="js/data.js"></script>
-<script src="js/pet.js"></script>
-<script src="js/runner.js"></script>
-<script src="js/main.js"></script>
+<!-- 🔊 AQUÍ VA LA MÚSICA -->
+<audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const btn = document.getElementById("btn");
+const title = document.getElementById("title");
+const message = document.getElementById("message");
+const music = document.getElementById("bgMusic");
+
+let musicStarted = false;
+let step = 0;
+
+const texts = [
+`Quiero decirte algo con calma, sin que suene a reclamo ni a presión.
+
+Contigo siento cosas que en mi vida había sentido.`,
+`No es algo superficial… yo sí me imagino un futuro contigo.`,
+`Lo que tenemos es muy bonito… y vale más que cualquier discusión.`,
+`Cuando te digo algo que me incomoda… es porque me importas.`,
+`Me encanta todo lo nuestro… incluso lo pequeño.`,
+`La app que hice… es para que tengas un pedacito de mí.`,
+`Yo estoy aquí… sincero… con ganas de que esto funcione.`,
+`Te amo ❤️`
+];
+
+const backgrounds = [
+"foto1.jpg",
+"foto2.jpg",
+"foto3.jpg",
+"foto4.jpg",
+"foto5.jpg",
+"foto1.jpg",
+"foto2.jpg",
+"foto3.jpg"
+];
+
+btn.addEventListener("click", () => {
+
+    // 🔊 INICIAR MÚSICA (solo una vez)
+    if(!musicStarted){
+        music.volume = 0;
+        music.play().catch(()=>{});
+        musicStarted = true;
+
+        // fade-in
+        let vol = 0;
+        let fade = setInterval(() => {
+            if(vol < 1){
+                vol += 0.05;
+                music.volume = vol;
+            } else {
+                clearInterval(fade);
+            }
+        }, 200);
+    }
+
+    step++;
+
+    // cambiar fondo
+    if(backgrounds[step - 1]){
+        document.body.style.backgroundImage = `url('${backgrounds[step - 1]}')`;
+    }
+
+    if(step === 1){
+        title.style.opacity = 1;
+        message.style.opacity = 1;
+        message.innerText = texts[0];
+        btn.innerText = "Sigue...";
+    } 
+    else if(step <= texts.length){
+        message.innerText = texts[step - 1];
+    } 
+    else {
+        btn.style.display = "none";
+        createHearts();
+    }
+});
+
+function createHearts(){
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerText = "❤";
+        heart.style.left = Math.random() * 100 + "vw";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 6000);
+    }, 300);
+}
+</script>
 
 </body>
 </html>
