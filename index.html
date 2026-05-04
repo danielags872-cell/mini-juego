@@ -15,7 +15,7 @@ body{
     justify-content:center;
     align-items:center;
     color:white;
-    background-image:url('foto4.jpg'); /* entrada con impacto */
+    background-image:url('foto4.jpg');
     background-size:cover;
     background-position:center;
     transition:background-image 1s ease-in-out;
@@ -26,7 +26,7 @@ body::before{
     position:absolute;
     width:100%;
     height:100%;
-    background:rgba(0,0,0,0.55);
+    background:rgba(0,0,0,0.6);
     z-index:0;
 }
 
@@ -40,7 +40,7 @@ body::before{
 
 h1{
     margin-bottom:20px;
-    font-size:28px;
+    font-size:30px;
     opacity:0;
     transition:1s;
 }
@@ -60,15 +60,10 @@ button{
     color:#222;
     font-weight:bold;
     cursor:pointer;
-    transition:.3s;
-}
-
-button:hover{
-    transform:scale(1.08);
 }
 
 .zoom{
-    animation:zoomEffect 8s ease-in-out infinite alternate;
+    animation:zoomEffect 10s ease-in-out infinite alternate;
 }
 
 @keyframes zoomEffect{
@@ -76,8 +71,21 @@ button:hover{
     to{background-size:110%}
 }
 
+/* latido */
+.heartbeat{
+    animation:heartbeat 0.8s infinite;
+}
+
+@keyframes heartbeat{
+    0%{transform:scale(1)}
+    25%{transform:scale(1.05)}
+    50%{transform:scale(1.1)}
+    75%{transform:scale(1.05)}
+    100%{transform:scale(1)}
+}
+
 .final{
-    font-size:40px;
+    font-size:42px;
     font-weight:bold;
     animation:fadeIn 2s ease forwards;
 }
@@ -92,7 +100,7 @@ button:hover{
 <body class="zoom">
 
 <div class="container">
-    <h1 id="title">Esto es para ti...</h1>
+    <h1 id="title"></h1>
     <p id="message"></p>
     <button id="btn">Toca aquí</button>
 </div>
@@ -111,28 +119,45 @@ let started = false;
 let step = 0;
 
 const texts = [
-"Contigo siento algo diferente... algo real.",
-"No es algo superficial. Yo sí me imagino un futuro contigo.",
-"Lo nuestro vale más que cualquier discusión.",
-"Cuando te digo algo... es porque me importas.",
-"Me encanta todo lo que somos, incluso lo pequeño.",
-"Esta app es para que tengas un pedacito de mí siempre.",
-"Yo estoy aquí... de verdad.",
-"Te amo ❤️"
+"Dilan, para Valeria Conde ❤️",
+"Quiero decirte algo sin prisa...",
+"Porque contigo todo se siente diferente.",
+"No es algo superficial… es real.",
+"Contigo siento una paz que no había sentido antes.",
+"Cuando estoy contigo… todo pesa menos.",
+"Me gusta cómo somos, incluso en lo simple.",
+"Me gusta cuando jugamos, cuando nos molestamos, cuando solo somos nosotros.",
+"Hay cosas pequeñas que para mí lo son todo.",
+"Como nuestras risas… nuestras palabras raras… nuestros momentos.",
+"Y es que contigo, hasta lo cotidiano se vuelve especial.",
+"A veces no soy perfecto… lo sé.",
+"A veces sobrepienso más de lo que debería.",
+"Pero todo eso nace de lo mucho que me importas.",
+"Porque sí quiero que lo nuestro funcione.",
+"No para un rato… sino para algo real.",
+"Yo sí me imagino un futuro contigo.",
+"Construyendo… creciendo… aprendiendo juntos.",
+"No quiero cambiarte… me gustas tal y como eres.",
+"Solo quiero que ambos mejoremos juntos.",
+"Porque lo que tenemos vale la pena.",
+"Y sé que algún día veremos todo esto y nos reiremos.",
+"Porque lo importante… es que estamos aquí.",
+"Intentándolo de verdad.",
+"Yo estoy aquí… sincero.",
+"Con ganas reales de que esto funcione.",
+"Y con algo muy claro en el corazón...",
+"Hay algo que quiero que sientas...",
+""
 ];
 
 const images = [
-"foto4.jpg",
-"foto1.jpg",
-"foto2.jpg",
-"foto3.jpg",
-"foto5.jpg",
-"foto6.jpg",
-"foto2.jpg",
-"foto4.jpg"
+"foto4.jpg","foto1.jpg","foto2.jpg","foto3.jpg","foto5.jpg","foto6.jpg",
+"foto1.jpg","foto2.jpg","foto3.jpg","foto4.jpg","foto5.jpg","foto6.jpg",
+"foto1.jpg","foto2.jpg","foto3.jpg","foto4.jpg","foto5.jpg","foto6.jpg",
+"foto2.jpg","foto3.jpg","foto4.jpg","foto5.jpg","foto6.jpg","foto1.jpg",
+"foto2.jpg","foto3.jpg","foto4.jpg","foto5.jpg"
 ];
 
-// efecto escritura
 function typeText(text, element, speed=35){
     element.innerHTML="";
     let i=0;
@@ -169,19 +194,55 @@ btn.addEventListener("click", ()=>{
 
     if(step === 1){
         title.style.opacity = 1;
-        typeText(texts[0], message);
+        typeText(texts[0], title);
         btn.innerText="Sigue...";
     }
-    else if(step <= texts.length){
+    else if(step < texts.length){
         typeText(texts[step-1], message);
     }
     else{
-        btn.style.display="none";
-        title.innerText="";
-        message.innerHTML="<div class='final'>Te amo ❤️</div>";
-        music.volume = 0.4; // baja un poco para el final
+        activarHold();
     }
 });
+
+function activarHold(){
+    message.innerHTML="Mantén presionado para sentirlo...";
+    btn.innerText="Mantén aquí ❤️";
+
+    let holdTime = 0;
+    let interval;
+
+    btn.onmousedown = btn.ontouchstart = () => {
+        btn.classList.add("heartbeat");
+
+        interval = setInterval(() => {
+            holdTime += 0.1;
+            music.volume = Math.min(1, music.volume + 0.02);
+
+            if(holdTime >= 2){
+                clearInterval(interval);
+                mostrarFinal();
+            }
+        }, 100);
+    };
+
+    btn.onmouseup = btn.ontouchend = () => {
+        clearInterval(interval);
+        holdTime = 0;
+        btn.classList.remove("heartbeat");
+    };
+}
+
+function mostrarFinal(){
+    btn.style.display="none";
+    title.innerText="";
+    message.innerHTML = `
+        <div class="final">Te amo ❤️</div>
+        <br>
+        <div style="font-size:18px;">att: el amor de tu vida</div>
+    `;
+    music.volume = 0.5;
+}
 </script>
 
 </body>
